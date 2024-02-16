@@ -61,7 +61,7 @@ export default function SideNav({ activeHref }: SideNavProps) {
     return (
         <SideNavigation
             activeHref={activeHref}
-            header={{ text: 'AWS HealthScribe', href: '/' }}
+            header={{ text: 'AWS HealthScribe 1', href: '/' }}
             items={sideNavItems}
             onFollow={(e) => {
                 e.preventDefault();
