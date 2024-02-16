@@ -92,7 +92,7 @@ function Welcome() {
     }
 
     return (
-        <ContentLayout header={<Header variant="h2">Demo Application Experience powered by AWS HealthScribe</Header>}>
+        <ContentLayout header={<Header variant="h2">Application Experience powered by AWS HealthScribe</Header>}>
             <Container footer={<Footer />}>
                 <Content />
             </Container>

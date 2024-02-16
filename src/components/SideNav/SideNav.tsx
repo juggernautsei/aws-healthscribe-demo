@@ -40,12 +40,6 @@ export default function SideNav({ activeHref }: SideNavProps) {
         { type: 'divider' },
         {
             type: 'link',
-            text: 'AWS HealthScribe 2',
-            href: 'https://aws.amazon.com/healthscribe',
-            external: true,
-        },
-        {
-            type: 'link',
             text: 'AWS for Health',
             href: 'https://aws.amazon.com/health',
             external: true,
