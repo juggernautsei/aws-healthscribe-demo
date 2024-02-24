@@ -38,7 +38,7 @@ export default function SideNav({ activeHref }: SideNavProps) {
             href: '/settings',
         },
         { type: 'divider' },
-        {
+        /*{
             type: 'link',
             text: 'AWS for Health',
             href: 'https://aws.amazon.com/health',
@@ -49,7 +49,7 @@ export default function SideNav({ activeHref }: SideNavProps) {
             text: 'Amazon Web Services',
             href: 'https://aws.amazon.com',
             external: true,
-        },
+        },*/
     ];
 
     return (
