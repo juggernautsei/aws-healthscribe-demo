@@ -87,10 +87,14 @@ export default function Auth({ visible, setVisible }: AuthParams) {
     }, [appTheme]);
 
     const checkCreditCardStatus = async (email: string) => {
-        const response = await axios.get(
-            `https://api.affordablecustomehr.com/stripe/resources/connection/api.php?email=${email}`
-        );
-        return response.data && response.data.user === true;
+        try {
+            const response = await axios.get(
+                `https://api.affordablecustomehr.com/stripe/resources/connection/api.php?email=${email}`
+            );
+            return response.data && response.data.user === true;
+        } catch {
+            return false;
+        }
     };
 
     const services = {
@@ -108,24 +112,21 @@ export default function Auth({ visible, setVisible }: AuthParams) {
             const hasCreditCard = await checkCreditCardStatus(username);
 
             if (!hasCreditCard) {
-                window.location.href = 'https://api.affordablecustomehr.com/stripe/';
+                window.open('https://api.affordablecustomehr.com/stripe/', '_blank');
             }
             return signUp;
         },
-        async handleSignIn({ username, password}: {
-            username: string;
-            password: string;
-        }) {
+        async handleSignIn({ username, password }: { username: string; password: string }) {
             const hasCreditCard = await checkCreditCardStatus(username);
 
             if (!hasCreditCard) {
-                window.location.href = 'https://api.affordablecustomehr.com/stripe/';
-            } else {
-                return AmplifyAuth.signIn({
-                    username,
-                    password,
-                });
+                window.open('https://api.affordablecustomehr.com/stripe/', '_blank');
             }
+
+            return AmplifyAuth.signIn({
+                username,
+                password,
+            });
         },
     };
 
