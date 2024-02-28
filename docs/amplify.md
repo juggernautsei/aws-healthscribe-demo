@@ -12,7 +12,7 @@ All backend resources are deployed by AWS Amplify. This document describes where
 
 ### Amplify Base
 
-This stack creates:
+This stack creates some stuff:
 
 -   A deployment S3 bucket to keep track of the Amplify deployment.
 
