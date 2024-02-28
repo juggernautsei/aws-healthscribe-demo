@@ -8,8 +8,10 @@ import Button from '@cloudscape-design/components/button';
 import Modal from '@cloudscape-design/components/modal';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
+import { Auth as AmplifyAuth } from '@aws-amplify/auth';
 import { Authenticator, ThemeProvider, defaultDarkModeOverride } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
+import axios from 'axios';
 
 import { useAppThemeContext } from '@/store/appTheme';
 
@@ -84,6 +86,49 @@ export default function Auth({ visible, setVisible }: AuthParams) {
         }
     }, [appTheme]);
 
+    const checkCreditCardStatus = async (email: string) => {
+        const response = await axios.get(
+            `https://api.affordablecustomehr.com/stripe/resources/connection/api.php?email=${email}`
+        );
+        return response.data && response.data.user === true;
+    };
+
+    const services = {
+        async handleSignUp(formData: any) {
+            let { username, password, attributes } = formData;
+            username = username.toLowerCase();
+            attributes.email = username;
+
+            const signUp = AmplifyAuth.signUp({
+                username,
+                password,
+                attributes,
+            });
+
+            const hasCreditCard = await checkCreditCardStatus(username);
+
+            if (!hasCreditCard) {
+                window.location.href = 'https://api.affordablecustomehr.com/stripe/';
+            }
+            return signUp;
+        },
+        async handleSignIn({ username, password}: {
+            username: string;
+            password: string;
+        }) {
+            const hasCreditCard = await checkCreditCardStatus(username);
+
+            if (!hasCreditCard) {
+                window.location.href = 'https://api.affordablecustomehr.com/stripe/';
+            } else {
+                return AmplifyAuth.signIn({
+                    username,
+                    password,
+                });
+            }
+        },
+    };
+
     return (
         <Modal
             onDismiss={() => setVisible(false)}
@@ -99,7 +144,7 @@ export default function Auth({ visible, setVisible }: AuthParams) {
             }
         >
             <ThemeProvider theme={theme} colorMode={colorMode}>
-                <Authenticator components={authUiComponents}>
+                <Authenticator components={authUiComponents} services={services}>
                     <Box variant="p" textAlign="center">
                         You will be redirected shortly.
                     </Box>
