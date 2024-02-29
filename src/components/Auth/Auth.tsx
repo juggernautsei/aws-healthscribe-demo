@@ -122,7 +122,7 @@ export default function Auth({ visible, setVisible }: AuthParams) {
             if (!hasCreditCard) {
                 window.open('https://api.affordablecustomehr.com/stripe/', '_blank');
                 return new Promise((resolve, reject) => {
-                    reject('Please create credit card');
+                    reject('No credit card on file');
                 });
             } else {
                 return AmplifyAuth.signIn({
