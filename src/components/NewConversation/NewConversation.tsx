@@ -133,7 +133,8 @@ export default function NewConversation() {
             Key: `${uploadLocation.key}/${(filePath as File).name}`,
         };
 
-        const secJobName = crypto.SHA256(!user ? "" : user.username ?? "") + jobName;
+        const userPrefix = crypto.SHA256(!user ? "" : user.username ?? "");
+        const secJobName = userPrefix + jobName;
         const jobParams = {
             MedicalScribeJobName: secJobName,
             DataAccessRoleArn: amplifyCustom.healthScribeServiceRole,
@@ -141,6 +142,12 @@ export default function NewConversation() {
             Media: {
                 MediaFileUri: `s3://${s3Location.Bucket}/${s3Location.Key}`,
             },
+            Tags: [ 
+                { 
+                    Key: 'Creator',
+                    Value: userPrefix
+                }
+            ],
             ...audioParams,
         };
 

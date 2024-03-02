@@ -15,6 +15,8 @@ import { TableHeader, TablePreferences } from './ConversationsTableComponents';
 import TableEmptyState from './TableEmptyState';
 import { columnDefs } from './tableColumnDefs';
 import { DEFAULT_PREFERENCES, TablePreferencesDef } from './tablePrefs';
+import { useAuthContext } from '@/store/auth';
+import crypto from 'crypto-js';
 
 export type HealthScribeJob = {
     CompletionTime: number;
@@ -44,6 +46,7 @@ export default function Conversations() {
 
     // Header counter for the number of HealthScribe jobs
     const headerCounterText = `(${healthScribeJobs.length}${Object.keys(moreHealthScribeJobs).length > 0 ? '+' : ''})`;
+    const { user } = useAuthContext();
 
     // Call Transcribe API to list HealthScribe jobs - optional search filter
     const listHealthScribeJobsWrapper = useCallback(async (searchFilter: ListHealthScribeJobsProps) => {
@@ -63,8 +66,13 @@ export default function Conversations() {
                 return;
             }
 
-            const listResults: HealthScribeJob[] = listHealthScribeJobsRsp.data?.MedicalScribeJobSummaries;
-
+            const userPrefix = crypto.SHA256(!user ? "" : user.username ?? "") + "";
+            const listResults: HealthScribeJob[] = listHealthScribeJobsRsp.data?.MedicalScribeJobSummaries.filter((hs:HealthScribeJob) => {
+                return hs.MedicalScribeJobName.startsWith(userPrefix);
+            }).map((hs:HealthScribeJob) => {
+                return {...hs, MedicalScribeJobName: hs.MedicalScribeJobName.replace(userPrefix, "")};
+            });
+            
             // if NextToken is specified, append search results to existing results
             if (processedSearchFilter.NextToken) {
                 setHealthScribeJobs((prevHealthScribeJobs) => prevHealthScribeJobs.concat(listResults));
