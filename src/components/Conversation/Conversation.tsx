@@ -52,12 +52,10 @@ export default function Conversation() {
                 setJobLoading(true);
                 const userPrefix = crypto.SHA256(!user ? "" : user.username ?? "") + "";
 
-                const getHealthScribeJobRsp = await getHealthScribeJob({ MedicalScribeJobName: conversationName });
+                const getHealthScribeJobRsp = await getHealthScribeJob({ MedicalScribeJobName: userPrefix + conversationName });
                 const MedicalScribeJob = getHealthScribeJobRsp.data?.MedicalScribeJob;
                 
                 console.log(getHealthScribeJobRsp);
-                if (!conversationName.startsWith(userPrefix))
-                    navigate('/conversations');
 
                 if (Object.keys(MedicalScribeJob).length > 0) {
                     setJobDetails(MedicalScribeJob);
