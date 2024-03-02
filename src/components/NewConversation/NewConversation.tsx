@@ -34,11 +34,13 @@ import { AudioDetailSettings, AudioIdentificationType, InputName } from './FormC
 import styles from './NewConversation.module.css';
 import { verifyJobParams } from './formUtils';
 import { AudioDetails, AudioSelection } from './types';
+import { useAuthContext } from '@/store/auth';
+import crypto from 'crypto-js';
 
 export default function NewConversation() {
     const { updateProgressBar } = useNotificationsContext();
     const navigate = useNavigate();
-
+    
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // is job submitting
     const [formError, setFormError] = useState<string | JSX.Element[]>('');
     const [jobName, setJobName] = useState<string>(''); // form - job name
@@ -57,6 +59,8 @@ export default function NewConversation() {
 
     const [submissionMode, setSubmissionMode] = useState<string>('uploadRecording'); // to hide or show the live recorder
     const [recordedAudio, setRecordedAudio] = useState<File | undefined>(); // audio file recorded via live recorder
+
+    const { user } = useAuthContext();
 
     // Set array for TokenGroup items
     const fileToken = useMemo(() => {
@@ -130,7 +134,7 @@ export default function NewConversation() {
         };
 
         const jobParams = {
-            MedicalScribeJobName: jobName,
+            MedicalScribeJobName: crypto.SHA256(!user ? "" : user.username ?? "") + jobName,
             DataAccessRoleArn: amplifyCustom.healthScribeServiceRole,
             OutputBucketName: outputBucket,
             Media: {
