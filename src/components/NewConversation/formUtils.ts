@@ -14,6 +14,10 @@ type VerifyJobParamsProps = {
         MaxSpeakerLabels?: number;
         ShowSpeakerLabels?: boolean;
     };
+    Tags?: {
+        Key: string;
+        Value: string;
+    }[];
 };
 
 export function verifyJobParams(jobParams: VerifyJobParamsProps) {

@@ -133,7 +133,7 @@ export default function NewConversation() {
             Key: `${uploadLocation.key}/${(filePath as File).name}`,
         };
 
-        const userPrefix = crypto.SHA256(!user ? "" : user.username ?? "");
+        const userPrefix = crypto.SHA256(!user ? "" : user.username ?? "") + "";
         const secJobName = userPrefix + jobName;
         const jobParams = {
             MedicalScribeJobName: secJobName,
@@ -150,8 +150,6 @@ export default function NewConversation() {
             ],
             ...audioParams,
         };
-
-        console.log(secJobName);
 
         const verifyParamResults = verifyJobParams(jobParams);
         if (!verifyParamResults.verified) {

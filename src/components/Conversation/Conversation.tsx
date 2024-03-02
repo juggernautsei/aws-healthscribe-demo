@@ -55,11 +55,13 @@ export default function Conversation() {
                 const getHealthScribeJobRsp = await getHealthScribeJob({ MedicalScribeJobName: userPrefix + conversationName });
                 const MedicalScribeJob = getHealthScribeJobRsp.data?.MedicalScribeJob;
                 
-                console.log(getHealthScribeJobRsp);
-
+                console.log(MedicalScribeJob);
+                
                 if (Object.keys(MedicalScribeJob).length > 0) {
                     setJobDetails(MedicalScribeJob);
                 }
+
+                MedicalScribeJob.MedicalScribeJobName = MedicalScribeJob.MedicalScribeJobName.replace(userPrefix, "");
 
                 // Get Clinical Document from result S3 URL
                 const clinicalDocumentUri = MedicalScribeJob.MedicalScribeOutput?.ClinicalDocumentUri;

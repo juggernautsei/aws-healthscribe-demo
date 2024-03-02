@@ -32,12 +32,10 @@ export type HealthScribeJob = {
         VocabularyName?: string;
     };
     StartTime?: number;
-    Tags?: [
-        {
-            Key: string;
-            Value: string;
-        },
-    ];
+    Tags?: {
+        Key: string;
+        Value: string;
+    }[];
 };
 
 export type HighlightId = {
