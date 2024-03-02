@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 import React, { useEffect, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import Grid from '@cloudscape-design/components/grid';
@@ -18,8 +18,11 @@ import RightPanel from './RightPanel';
 import TopPanel from './TopPanel';
 import ViewResults from './ViewResults';
 import { HealthScribeJob } from './types';
+import { useAuthContext } from '@/store/auth';
+import crypto from 'crypto-js';
 
 export default function Conversation() {
+    const navigate = useNavigate();
     const { conversationName } = useParams();
     const { addFlashMessage } = useNotificationsContext();
 
@@ -29,6 +32,7 @@ export default function Conversation() {
 
     const [clinicalDocument, setClinicalDocument] = useState<IAuraClinicalDocOutput | null>(null);
     const [transcriptFile, setTranscriptFile] = useState<IAuraTranscriptOutput | null>(null);
+    const { user } = useAuthContext();
 
     const [
         wavesurfer,
@@ -46,8 +50,15 @@ export default function Conversation() {
         async function getJob(conversationName: string) {
             try {
                 setJobLoading(true);
+                const userPrefix = crypto.SHA256(!user ? "" : user.username ?? "") + "";
+
                 const getHealthScribeJobRsp = await getHealthScribeJob({ MedicalScribeJobName: conversationName });
                 const MedicalScribeJob = getHealthScribeJobRsp.data?.MedicalScribeJob;
+                
+                console.log(getHealthScribeJobRsp);
+                if (!conversationName.startsWith(userPrefix))
+                    navigate('/conversations');
+
                 if (Object.keys(MedicalScribeJob).length > 0) {
                     setJobDetails(MedicalScribeJob);
                 }
