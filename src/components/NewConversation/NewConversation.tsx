@@ -142,12 +142,6 @@ export default function NewConversation() {
             Media: {
                 MediaFileUri: `s3://${s3Location.Bucket}/${s3Location.Key}`,
             },
-            Tags: [ 
-                { 
-                    Key: 'Creator',
-                    Value: userPrefix
-                }
-            ],
             ...audioParams,
         };
 
