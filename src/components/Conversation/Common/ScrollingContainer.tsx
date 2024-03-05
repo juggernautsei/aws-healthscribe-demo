@@ -41,11 +41,10 @@ export default function ScrollingContainer({ containerTitle, children, showCopyI
     }, [childContainerRef.current]);
 
     const copyFrameText = () => {
-        if (navigator && navigator.clipboard && navigator.clipboard.writeText && childContainerRef.current != null)
-        {
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText && childContainerRef.current != null) {
             const childContainer = childContainerRef.current as HTMLElement;
             navigator.clipboard.writeText(childContainer.innerText);
-            
+
             addFlashMessage({
                 id: 'Copy text success',
                 header: 'Success',
@@ -72,16 +71,18 @@ export default function ScrollingContainer({ containerTitle, children, showCopyI
             <div className={styles.childDiv} ref={childContainerRef}>
                 {children}
             </div>
-            {showDownScroll && (
-                <div className={styles.scrollDownIcon}>
-                    <Icon name="angle-down" size="medium" />
-                </div>
-            )}
-            {showCopyIcon && (
-                <div className={styles.copyIcon} onClick={copyFrameText}>
-                    <Icon name="copy" size="medium" />
-                </div>
-            )}
+            <div className={styles.scrollBottom}>
+                {showDownScroll && (
+                    <div className={styles.scrollDownIcon}>
+                        <Icon name="angle-down" size="medium" />
+                    </div>
+                )}
+                {showCopyIcon && (
+                    <div className={styles.copyIcon} onClick={copyFrameText}>
+                        <Icon name="copy" size="medium" />
+                    </div>
+                )}
+            </div>
         </Container>
     );
 }
