@@ -22,7 +22,8 @@
 .scrollDownIcon {
     opacity: 0.5;
     animation: jumpBottom 1.5s infinite;
-    margin-right: 10%;
+    margin-right: 45px;
+    padding-top: 5px;
 }
 
 .copyIcon {
@@ -35,6 +36,7 @@
     left: 50%;
     display: flex;
     align-items: center;
+    height: 30px;
 }
 
 @keyframes jumpTop {
