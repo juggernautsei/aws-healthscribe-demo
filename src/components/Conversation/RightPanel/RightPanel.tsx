@@ -56,7 +56,7 @@ export default function RightPanel({
         return <LoadingContainer containerTitle="Insights" text="Loading Insights" />;
     } else {
         return (
-            <ScrollingContainer containerTitle="Insights">
+            <ScrollingContainer containerTitle="Insights" showCopyIcon={true}>
                 {isNewSummarizationFormation ? (
                     <SummarizedConceptsNew
                         sections={clinicalDocument.ClinicalDocumentation.Sections as IAuraClinicalDocOutputSectionNew[]}
